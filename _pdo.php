@@ -85,5 +85,3 @@ function PDO_ErrorInfo()
     global $PDO;
     return $PDO->errorInfo();
 }
-
-?>

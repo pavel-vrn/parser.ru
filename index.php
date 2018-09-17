@@ -18,11 +18,11 @@ $pars = new Parser();
 $result = "";
 if(isset($_POST['submit']))
 {
-    //$result = $pars->getresult($_POST['in_word'])
-    $result = $pars->getResult();
+    $result = $pars->getresult($_POST['in_word']);
 }
 
 ?>
+
 <div style="width: 300px">
 <form method="post">
     <table align="left">
