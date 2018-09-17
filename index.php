@@ -3,13 +3,13 @@
 <br><br>
 <?php
 error_reporting(-1);
-include "./_pdo.php";
-include "inc/Parser.php";
+require "inc/Parser.php";
+require "inc/Pdo_Helper.php";
 
-$db_file = "./verbs_db.db";
-PDO_Connect("sqlite:$db_file");
+$db = Pdo_Helper::singleton();
 
-$data = PDO_FetchAll("SELECT * FROM words");
+$data = $db->PDO_FetchAll("SELECT * FROM words");
+
 echo "<pre>";
 print_r ($data);
 echo "</pre>";
@@ -20,7 +20,6 @@ if(isset($_POST['submit']))
 {
     $result = $pars->getresult($_POST['in_word']);
 }
-
 ?>
 
 <div style="width: 300px">
