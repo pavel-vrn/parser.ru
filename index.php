@@ -18,7 +18,8 @@ $pars = new Parser();
 $result = "";
 if(isset($_POST['submit']))
 {
-    $result = $pars->getresult($_POST['in_word']);
+    $result = $pars->getresult(1);
+    //$result = $pars->getresult($_POST['in_word']);
 }
 ?>
 
@@ -38,7 +39,7 @@ if(isset($_POST['submit']))
         </tr>
         <tr>
             <td><strong>Результат:<strong></td>
-            <td><?php echo $result; ?></td>
+            <td><?php print_r($result); ?></td>
         </tr>
         <tr>
         </tr>

@@ -20,29 +20,34 @@ array_values — Выбирает все значения массива*/
 
 class Parser
 {
-    private $_inputWord;
+    /**
+     * @var Pdo_Helper
+     * Объект для работы с базой данных
+     */
+    protected $_db;
 
-    private $_rules = array (
-        "повольн_одУмьсктоу(а)тi_#" => "первое слово",
-        "въкеУвьсктвоу(а)тi_# сьн" => "второе слово",
-        "възкеУвьсктвоу(а)тi_#" => "третье слово",
+    private $_word_id;
 
-    );
+    private $_result;
+
+    public function __construct()
+    {
+        $this->_db = Pdo_Helper::singleton();
+    }
 
     function transform()
     {
-        $input = strtolower($this->_inputWord);
-        foreach ($this->_rules as $key => $value) {
-            if ($input == strtolower($key)) {
-              return $value;
-            }
-        }
-        return "Ошибка";
+        $transWord = array();
+        $query = "SELECT r.id FROM rules r JOIN links l on r.id = l.rule_id WHERE l.word_id = ". $this->_word_id;
+        $rules = $this->_db->PDO_FetchAll($query);
+
+        return $rules;
+
     }
 
     function getResult($word)
     {
-        $this->_inputWord = $word;
+        $this->_word_id = $word;
         return $this->transform();
     }
 }

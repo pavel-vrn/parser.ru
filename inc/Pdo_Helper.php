@@ -39,12 +39,6 @@ class Pdo_Helper
     private $_dsn;
 
     /**
-     * @var resource
-     * Результат выполнения запроса
-     */
-    private $_result;
-
-    /**
      * @return object
      * Создание единственного экземпляра класса (паттерн Синглтон)
      */
@@ -68,7 +62,7 @@ class Pdo_Helper
      */
     public function __clone()
     {
-        trigger_error(CLONE_IS_NOT_ALLOWED, E_USER_ERROR);
+        trigger_error('Clone is not allowed', E_USER_ERROR);
     }
 
     private function __construct() {
