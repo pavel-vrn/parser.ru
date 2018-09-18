@@ -8,16 +8,46 @@
 
 class Pdo_Helper
 {
+    /**
+     * @var object
+     * экземпляр класса
+     */
     private static $_instance;
 
+    /**
+     * @var string
+     * путь к файлу базы данных SQLite
+     */
     private $_db_file = "./verbs_db.db";
 
+    /**
+     * @var string
+     * имя пользователя БД
+     */
     private $_user = "";
 
+    /**
+     * @var string
+     * пароль БД
+     */
     private $_password = "";
 
+    /**
+     * @var string
+     * Data Source Name - соединение с БД SQLite
+     */
     private $_dsn;
 
+    /**
+     * @var resource
+     * Результат выполнения запроса
+     */
+    private $_result;
+
+    /**
+     * @return object
+     * Создание единственного экземпляра класса (паттерн Синглтон)
+     */
     public static function singleton()
     {
         if (!isset(self::$_instance)) {
@@ -33,9 +63,8 @@ class Pdo_Helper
     }
 
     /**
-     * Создание экземпляра с помощью new невозможно
-     *
      * @return void
+     * Создание экземпляра с помощью new невозможно
      */
     public function __clone()
     {
@@ -47,6 +76,10 @@ class Pdo_Helper
         $this->PDO_Connect();
     }
 
+    /**
+     * @return void
+     * Подключение к БД
+     */
     private function PDO_Connect()
     {
         global $PDO;
@@ -70,6 +103,7 @@ class Pdo_Helper
             return false;
         }
     }
+
     public function PDO_FetchRow($query, $params=null)
     {
         global $PDO;
@@ -81,6 +115,7 @@ class Pdo_Helper
         }
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
     public function PDO_FetchAll($query, $params=null)
     {
         global $PDO;
@@ -92,6 +127,7 @@ class Pdo_Helper
         }
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
     public function PDO_FetchAssoc($query, $params=null)
     {
         global $PDO;
@@ -108,6 +144,7 @@ class Pdo_Helper
         }
         return $assoc;
     }
+
     public function PDO_Execute($query, $params=null)
     {
         global $PDO;
@@ -119,11 +156,13 @@ class Pdo_Helper
             return $PDO->query($query);
         }
     }
+
     public function PDO_LastInsertId()
     {
         global $PDO;
         return $PDO->lastInsertId();
     }
+
     function PDO_ErrorInfo()
     {
         global $PDO;
