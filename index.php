@@ -10,9 +10,9 @@ $db = Pdo_Helper::singleton();
 
 $data = $db->PDO_FetchAll("SELECT * FROM words");
 
-echo "<pre>";
-print_r ($data);
-echo "</pre>";
+//echo "<pre>";
+//print_r ($data);
+//echo "</pre>";
 
 $pars = new Parser();
 $result = "";
