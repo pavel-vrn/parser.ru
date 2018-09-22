@@ -21,9 +21,9 @@ require "inc/Pdo_Helper.php";
 $db = Pdo_Helper::singleton();
 
 $pars = new Parser();
-$result = "";
 $result = $pars->getresult(1);
-
+$words = $pars->getWords();
+$rules = $pars->getRules();
 ?>
 
 <a href="<?php echo $_SERVER["REQUEST_URI"];?>">Обновить</a>
@@ -31,13 +31,10 @@ $result = $pars->getresult(1);
 <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
 
     <li class="nav-item">
-        <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-verbs" role="tab" aria-controls="pills-home" aria-selected="true">Глаголы</a>
+        <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-verbs" role="tab" aria-controls="pills-verbs" aria-selected="true">Глаголы</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-rules" role="tab" aria-controls="pills-profile" aria-selected="false">Правила</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">Contact</a>
+        <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-rules" role="tab" aria-controls="pills-rules" aria-selected="false">Правила</a>
     </li>
     <li class="nav-item">
         <form class="form-inline my-2 my-lg-0 nav-link">
@@ -47,7 +44,7 @@ $result = $pars->getresult(1);
     </li>
 </ul>
 <div class="tab-content" id="pills-tabContent">
-    <div class="tab-pane fade show active" id="pills-verbs" role="tabpanel" aria-labelledby="pills-home-tab">
+    <div class="tab-pane fade show active" id="pills-verbs" role="tabpanel" aria-labelledby="pills-verbs-tab">
         <table class="table table-hover table-bordered">
             <thead class="thead-inverse">
             <tr>
@@ -63,21 +60,22 @@ $result = $pars->getresult(1);
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>требуем</td>
-                <td>трЕб</td>
-                <td>оуj</td>
-                <td></td>
-                <td>е</td>
-                <td></td>
-                <td>мъ</td>
-                <td><?php print_r($result); ?></td>
-                <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">изменить</button></td>
-            </tr>
+            <?php
+            foreach ($words as $items) {
+                echo '<tr>';
+                foreach ($items as $key => $value) {
+                    if ($key != 'id')
+                        echo '<td>' . $value . '</td>';
+                }
+                echo '<td>' . $pars->getresult($items["id"]) . '</td>';
+                echo '<td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">изменить</button></td>';
+                echo '</tr>';
+            }
+            ?>
             </tbody>
         </table>
     </div>
-    <div class="tab-pane fade" id="pills-rules" role="tabpanel" aria-labelledby="pills-profile-tab">
+    <div class="tab-pane fade" id="pills-rules" role="tabpanel" aria-labelledby="pills-rules-tab">
         <table class="table table-hover table-bordered">
             <thead class="thead-inverse">
             <tr>
@@ -86,22 +84,24 @@ $result = $pars->getresult(1);
                 <th>Постусловие</th>
                 <th>Вход</th>
                 <th>Выход</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>требуем</td>
-                <td>трЕб</td>
-                <td>оуj</td>
-                <td></td>
-                <td>е</td>
-            </tr>
+            <?php
+            foreach ($rules as $items) {
+                echo '<tr>';
+                foreach ($items as $value) {
+                    echo '<td>' . $value . '</td>';
+                }
+                echo '<td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">изменить</button></td>';
+                echo '</tr>';
+            }
+            ?>
             </tbody>
         </table>
     </div>
-    <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">...</div>
 </div>
-
 
 <!-- Модальное окно -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">

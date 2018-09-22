@@ -37,7 +37,15 @@ class Parser
 
     public function getWords() {
         $query = <<<SQL
-SELECT pre_base, first_st_suff, second_st_suff, cat_suff, part_suff, flex FROM words
+SELECT id, example, pre_base, first_st_suff, second_st_suff, cat_suff, part_suff, flex FROM words
+SQL;
+        $result = $this->_db->PDO_FetchAll($query);
+        return $result;
+    }
+
+    public function getRules() {
+        $query = <<<SQL
+SELECT type, precondition, postcondition, input, output FROM rules
 SQL;
         $result = $this->_db->PDO_FetchAll($query);
         return $result;
