@@ -35,16 +35,23 @@ class Parser
         $this->_db = Pdo_Helper::singleton();
     }
 
+    /**
+     * @return string
+     */
     function transform()
     {
         //получаем транскрипцию проверямого слова и записываем её в массив
-        $query = 'SELECT pre_base, first_st_suff, second_st_suff, cat_suff, part_suff, flex FROM words
-            WHERE id = ' . $this->_word_id;
+        $query = <<<SQL
+SELECT pre_base, first_st_suff, second_st_suff, cat_suff, part_suff, flex FROM words WHERE id = $this->_word_id
+SQL;
+
         $transWord = $this->_db->PDO_FetchRow($query);
 
         // получаем список правил для проверяемого слова и сортируем их по приоритету
-        $query = 'SELECT * FROM rules r JOIN links l on r.id = l.rule_id 
-            WHERE l.word_id = ' . $this->_word_id . ' ORDER BY l.priority';
+        $query = <<<SQL
+SELECT * FROM rules r JOIN links l on r.id = l.rule_id WHERE l.word_id = $this->_word_id ORDER BY l.priority
+SQL;
+
         $rules = $this->_db->PDO_FetchAll($query);
 
         //применяем по порядку все правила для слова
@@ -60,24 +67,29 @@ class Parser
                     break;
                 case 'first_st_suff':
                     if ($value['precondition'] != null && $value['postcondition'] != null) {
-                        if ($value['precondition'] == $transWord['pre_base'] && $value['postcondition'] == $transWord['second_st_suff'])
+                        if ($value['precondition'] == $transWord['pre_base'] && $value['postcondition'] == $transWord['second_st_suff']) {
                             $transWord['first_st_suff'] = $value['output'];
-                    } elseif ($value['precondition'] != null && $value['postcondition'] == null)
+                        }
+                    } elseif ($value['precondition'] != null && $value['postcondition'] == null) {
                         if ($value['precondition'] == $transWord['pre_base']) {
                             $transWord['first_st_suff'] = $value['output'];
-                        } elseif ($value['precondition'] == null && $value['postcondition'] != null)
+                        }
+                        } elseif ($value['precondition'] == null && $value['postcondition'] != null) {
                             if ($value['postcondition'] == $transWord['second_st_suff']) {
                                 $transWord['first_st_suff'] = $value['output'];
-                            } else
-                                $transWord['first_st_suff'] = $value['output'];
+                        }
+                    } else
+                            $transWord['first_st_suff'] = $value['output'];
                     break;
                 case 'second_st_suff':
                     if ($value['precondition'] != null && $value['postcondition'] != null) {
-                        if ($value['precondition'] == $transWord['first_st_suff'] && $value['postcondition'] == $transWord['cat_suff'])
+                        if ($value['precondition'] == $transWord['first_st_suff'] && $value['postcondition'] == $transWord['cat_suff']) {
                             $transWord['second_st_suff'] = $value['output'];
-                    } elseif ($value['precondition'] != null && $value['postcondition'] == null)
+                        }
+                    } elseif ($value['precondition'] != null && $value['postcondition'] == null) {
                         if ($value['precondition'] == $transWord['first_st_suff']) {
                             $transWord['second_st_suff'] = $value['output'];
+                        }
                         } elseif ($value['precondition'] == null && $value['postcondition'] != null)
                             if ($value['postcondition'] == $transWord['cat_suff']) {
                                 $transWord['second_st_suff'] = $value['output'];
@@ -86,11 +98,13 @@ class Parser
                     break;
                 case 'cat_suff':
                     if ($value['precondition'] != null && $value['postcondition'] != null) {
-                        if ($value['precondition'] == $transWord['second_st_suff'] && $value['postcondition'] == $transWord['part_suff'])
+                        if ($value['precondition'] == $transWord['second_st_suff'] && $value['postcondition'] == $transWord['part_suff']) {
                             $transWord['cat_suff'] = $value['output'];
-                    } elseif ($value['precondition'] != null && $value['postcondition'] == null)
+                        }
+                    } elseif ($value['precondition'] != null && $value['postcondition'] == null) {
                         if ($value['precondition'] == $transWord['second_suff']) {
                             $transWord['[cat_suff'] = $value['output'];
+                        }
                         } elseif ($value['precondition'] == null && $value['postcondition'] != null)
                             if ($value['postcondition'] == $transWord['part_suff']) {
                                 $transWord['cat_suff'] = $value['output'];
