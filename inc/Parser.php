@@ -35,10 +35,18 @@ class Parser
         $this->_db = Pdo_Helper::singleton();
     }
 
+    public function getWords() {
+        $query = <<<SQL
+SELECT pre_base, first_st_suff, second_st_suff, cat_suff, part_suff, flex FROM words
+SQL;
+        $result = $this->_db->PDO_FetchAll($query);
+        return $result;
+    }
+
     /**
      * @return string
      */
-    function transform()
+    public function transform()
     {
         //получаем транскрипцию проверямого слова и записываем её в массив
         $query = <<<SQL

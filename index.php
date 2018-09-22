@@ -1,6 +1,7 @@
 <html>
 <head>
     <link rel='stylesheet' href='css/bootstrap.css'>
+    <link rel='stylesheet' href='css/main.css'>
 
     <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript" src="js/bootstrap.js"></script>
@@ -22,82 +23,89 @@ $db = Pdo_Helper::singleton();
 $pars = new Parser();
 $result = "";
 $result = $pars->getresult(1);
-if(isset($_POST['submit']))
-{
-    //$result = $pars->getresult(1);
-    //$result = $pars->getresult($_POST['in_word']);
-}
+
 ?>
 
+<a href="<?php echo $_SERVER["REQUEST_URI"];?>">Обновить</a>
 
-<a href="<?php echo $_SERVER["REQUEST_URI"];?>">Refresh</a>
+<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
 
-<nav class="navbar navbar-expand-sm navbar-dark bg-primary">
-    <a class="navbar-brand text-white">
-        <!--<img src="/assets/images/favicon/favicon-180x180.png" class="d-inline-block align-top" width="30" height="30" alt="..."> -->
-        Глаголы
-    </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar3" aria-controls="navbar3" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbar3">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="#">Правила <span class="sr-only">(current)</span></a>
-            </li>
-            <!--<li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
-            </li>-->
-            <!--<li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown3" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown3">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Something else here</a>
-                </div>
-            </li>-->
-        </ul>
-        <form class="form-inline my-2 my-lg-0">
+    <li class="nav-item">
+        <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-verbs" role="tab" aria-controls="pills-home" aria-selected="true">Глаголы</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-rules" role="tab" aria-controls="pills-profile" aria-selected="false">Правила</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">Contact</a>
+    </li>
+    <li class="nav-item">
+        <form class="form-inline my-2 my-lg-0 nav-link">
             <input class="form-control mr-sm-2" type="search" placeholder="Поиск" aria-label="Поиск">
             <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Поиск</button>
         </form>
+    </li>
+</ul>
+<div class="tab-content" id="pills-tabContent">
+    <div class="tab-pane fade show active" id="pills-verbs" role="tabpanel" aria-labelledby="pills-home-tab">
+        <table class="table table-hover table-bordered">
+            <thead class="thead-inverse">
+            <tr>
+                <th>Пример</th>
+                <th>ПредСтОснова</th>
+                <th>СтСуф1</th>
+                <th>СтСуф2</th>
+                <th>КатСуф</th>
+                <th>ПричСуф</th>
+                <th>Флекс</th>
+                <th>Результат</th>
+                <th>Правила</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>требуем</td>
+                <td>трЕб</td>
+                <td>оуj</td>
+                <td></td>
+                <td>е</td>
+                <td></td>
+                <td>мъ</td>
+                <td><?php print_r($result); ?></td>
+                <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">изменить</button></td>
+            </tr>
+            </tbody>
+        </table>
     </div>
-</nav>
+    <div class="tab-pane fade" id="pills-rules" role="tabpanel" aria-labelledby="pills-profile-tab">
+        <table class="table table-hover table-bordered">
+            <thead class="thead-inverse">
+            <tr>
+                <th>Тип</th>
+                <th>Предусловие</th>
+                <th>Постусловие</th>
+                <th>Вход</th>
+                <th>Выход</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>требуем</td>
+                <td>трЕб</td>
+                <td>оуj</td>
+                <td></td>
+                <td>е</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">...</div>
+</div>
 
 
-<table class="table table-hover table-bordered">
-    <thead class="thead-inverse">
-    <tr>
-        <th>Пример</th>
-        <th>ПредСтОснова</th>
-        <th>СтСуф1</th>
-        <th>СтСуф2</th>
-        <th>КатСуф</th>
-        <th>ПричСуф</th>
-        <th>Флекс</th>
-        <th>Результат</th>
-        <th>Правила</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>требуем</td>
-        <td>трЕб</td>
-        <td>оуj</td>
-        <td></td>
-        <td>е</td>
-        <td></td>
-        <td>мъ</td>
-        <td><?php print_r($result); ?></td>
-        <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">изменить</button></td>
-    </tr>
-    </tbody>
-</table>
 <!-- Модальное окно -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Правила для «Требуем»</h5>
@@ -106,26 +114,8 @@ if(isset($_POST['submit']))
                 </button>
             </div>
             <div class="modal-body">
-                <table class="table table-hover table-bordered">
-                    <thead class="thead-inverse">
-                    <tr>
-                        <th>Пример</th>
-                        <th>ПредСтОснова</th>
-                        <th>СтСуф1</th>
-                        <th>СтСуф2</th>
-                        <th>КатСуф</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>требуем</td>
-                        <td>трЕб</td>
-                        <td>оуj</td>
-                        <td></td>
-                        <td>е</td>
-                    </tr>
-                    </tbody>
-                </table>
+
+                Содержимое модального окна
 
             </div>
             <div class="modal-footer">
@@ -135,24 +125,5 @@ if(isset($_POST['submit']))
         </div>
     </div>
 </div>
-
-
-<div style="width: 300px">
-<form method="post">
-    <table align="left">
-        <tr>
-            <td>Входные данные:</td>
-            <td><input type="text" name="in_word"></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td><input type="submit" name="submit" value = "Преобразовать"></td>
-        </tr>
-    </table>
-
-</form>
-</div>
-
-
 </body>
 </html>
