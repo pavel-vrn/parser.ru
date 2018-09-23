@@ -52,15 +52,13 @@ $rules = $pars->getRules();
     </li> -->
 </ul>
 
-
-
 <div class="tab-content" id="pills-tabContent">
     <?php
     // количество записей, выводимых на странице
     $per_page = 100;
     // получаем номер страницы
-    if (isset($_GET['page'])) {
-        $page = ($_GET['page'] - 1);
+    if (isset($_GET['page-words'])) {
+        $page = ($_GET['page-words'] - 1);
     } else
         $page=0;
     // вычисляем первый оператор для LIMIT
@@ -82,7 +80,7 @@ $rules = $pars->getRules();
             if ($i - 1 == $page) {
                 echo $i . " ";
             } else {
-                echo '<a href="' . $_SERVER['PHP_SELF'] . '?page=' . $i . '">' . $i . "</a> ";
+                echo '<a href="' . $_SERVER['PHP_SELF'] . '?page-words=' . $i . '">' . $i . "</a> ";
             }
         }
         ?>
@@ -122,13 +120,43 @@ $rules = $pars->getRules();
             if ($i - 1 == $page) {
                 echo $i . " ";
             } else {
-                echo '<a href="' . $_SERVER['PHP_SELF'] . '?page=' . $i . '">' . $i . "</a> ";
+                echo '<a href="' . $_SERVER['PHP_SELF'] . '?page-words=' . $i . '">' . $i . "</a> ";
             }
         }
         ?>
     </div>
 
     <div class="tab-pane fade" id="pills-rules" role="tabpanel" aria-labelledby="pills-rules-tab">
+        <?php
+        // количество записей, выводимых на странице
+        $per_page = 5;
+        // получаем номер страницы
+        if (isset($_GET['page-rules'])) {
+            $page = ($_GET['page-rules'] - 1);
+        } else
+            $page=0;
+        // вычисляем первый оператор для LIMIT
+        $start = abs($page * $per_page);
+        // составляем запрос и выводим записи
+        // переменную $start используем, как нумератор записей.
+        $query = "SELECT * FROM rules LIMIT $start, $per_page";
+        $res = $db->PDO_FetchAll($query);
+
+        $query = "SELECT count(*) FROM rules";
+        $result = $db->PDO_FetchRow($query);
+        $total_rows = implode($result);
+        $num_pages=ceil($total_rows / $per_page);
+        ?>
+        Страницы:
+        <?php
+        for($i = 1;$i <= $num_pages; $i++) {
+        if ($i - 1 == $page) {
+        echo $i . " ";
+        } else {
+        echo '<a href="' . $_SERVER['PHP_SELF'] . '?page-rules=' . $i . '">' . $i . "</a> ";
+        }
+        }
+        ?>
         <table class="table table-hover table-bordered">
             <thead class="thead-inverse">
             <tr>
@@ -142,7 +170,7 @@ $rules = $pars->getRules();
             </thead>
             <tbody>
             <?php
-            foreach ($rules as $items) {
+            foreach ($res as $items) {
                 echo '<tr>';
                 foreach ($items as $value) {
                     echo '<td>' . $value . '</td>';
@@ -154,6 +182,16 @@ $rules = $pars->getRules();
             </tbody>
         </table>
     </div>
+    Страницы:
+    <?php
+    for($i = 1;$i <= $num_pages; $i++) {
+        if ($i - 1 == $page) {
+            echo $i . " ";
+        } else {
+            echo '<a href="' . $_SERVER['PHP_SELF'] . '?page-rules=' . $i . '">' . $i . "</a> ";
+        }
+    }
+    ?>
 </div>
 
 <!-- Модальное окно -->
