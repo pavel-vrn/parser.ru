@@ -28,7 +28,7 @@ $rules = $pars->getRules();
 
 ?>
 
-<a href="<?php echo $_SERVER["REQUEST_URI"];?>">Обновить</a>
+<!--<a href="<?php //echo $_SERVER["REQUEST_URI"];?>">Обновить</a> -->
 
 <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
 
@@ -39,48 +39,53 @@ $rules = $pars->getRules();
         <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-rules" role="tab" aria-controls="pills-rules" aria-selected="false">Правила</a>
     </li>
     <li class="nav-item">
+           <a>&nbsp&nbsp&nbsp&nbsp&nbsp</a>
+    </li>
+    <li class="nav-item">
+        <input type="button" class="btn btn-outline-dark" value="Обновить" onClick="window.location.reload( true );">
+    </li>
+    <!--<li class="nav-item">
         <form class="form-inline my-2 my-lg-0 nav-link">
             <input class="form-control mr-sm-2" type="search" placeholder="Поиск" aria-label="Поиск">
             <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Поиск</button>
         </form>
-    </li>
+    </li> -->
 </ul>
 
 
-<nav aria-label="Page navigation example">
-    <ul class="pagination">
-        <li class="page-item "><a class="page-link" href="#">Previous</a></li>
-        <li class="page-item"><a class="page-link" href="#">1</a></li>
-        <li class="page-item"><a class="page-link" href="#">2</a></li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item"><a class="page-link" href="#">Next</a></li>
-    </ul>
-</nav>
-
-
-<?php
-// количество записей, выводимых на странице
-$per_page = 10;
-// получаем номер страницы
-if (isset($_GET['page'])) $page=($_GET['page']-1); else $page=0;
-// вычисляем первый оператор для LIMIT
-$start = abs($page * $per_page);
-// составляем запрос и выводим записи
-// переменную $start используем, как нумератор записей.
-$q = "SELECT * FROM words LIMIT $start, $per_page";
-$res = $db->PDO_FetchAll($q);
-
-$q="SELECT count(*) FROM words";
-$result = $db->PDO_FetchRow($q);
-$total_rows = implode($result);
-
-$num_pages=ceil($total_rows/$per_page);
-
-?>
-
 
 <div class="tab-content" id="pills-tabContent">
+    <?php
+    // количество записей, выводимых на странице
+    $per_page = 100;
+    // получаем номер страницы
+    if (isset($_GET['page'])) {
+        $page = ($_GET['page'] - 1);
+    } else
+        $page=0;
+    // вычисляем первый оператор для LIMIT
+    $start = abs($page * $per_page);
+    // составляем запрос и выводим записи
+    // переменную $start используем, как нумератор записей.
+    $query = "SELECT * FROM words LIMIT $start, $per_page";
+    $res = $db->PDO_FetchAll($query);
+
+    $query = "SELECT count(*) FROM words";
+    $result = $db->PDO_FetchRow($query);
+    $total_rows = implode($result);
+    $num_pages=ceil($total_rows / $per_page);
+    ?>
     <div class="tab-pane fade show active" id="pills-verbs" role="tabpanel" aria-labelledby="pills-verbs-tab">
+        Страницы:
+        <?php
+        for($i = 1;$i <= $num_pages; $i++) {
+            if ($i - 1 == $page) {
+                echo $i . " ";
+            } else {
+                echo '<a href="' . $_SERVER['PHP_SELF'] . '?page=' . $i . '">' . $i . "</a> ";
+            }
+        }
+        ?>
         <table class="table table-hover table-bordered">
             <thead class="thead-inverse">
             <tr>
@@ -111,17 +116,17 @@ $num_pages=ceil($total_rows/$per_page);
             ?>
             </tbody>
         </table>
-    </div>
-
-    <?php
-    for($i = 1;$i <= $num_pages; $i++) {
-        if ($i - 1 == $page) {
-            echo $i . " ";
-        } else {
-            echo '<a href="' . $_SERVER['PHP_SELF'] . '?page=' . $i . '">' . $i . "</a> ";
+        Страницы:
+        <?php
+        for($i = 1;$i <= $num_pages; $i++) {
+            if ($i - 1 == $page) {
+                echo $i . " ";
+            } else {
+                echo '<a href="' . $_SERVER['PHP_SELF'] . '?page=' . $i . '">' . $i . "</a> ";
+            }
         }
-    }
-    ?>
+        ?>
+    </div>
 
     <div class="tab-pane fade" id="pills-rules" role="tabpanel" aria-labelledby="pills-rules-tab">
         <table class="table table-hover table-bordered">
