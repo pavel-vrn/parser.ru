@@ -8,13 +8,14 @@
     <script type="text/javascript" src="js/bootstrap.bundle.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.bundle.min.js"></script>
+
 </head>
 
 <body>
 
 <?php
 //к времени PhpStorm накинуть 6 часов времени
-error_reporting(-1);
+error_reporting(E_ALL);
 require "inc/Parser.php";
 require "inc/Pdo_Helper.php";
 
@@ -22,8 +23,9 @@ $db = Pdo_Helper::singleton();
 
 $pars = new Parser();
 $result = $pars->getresult(1);
-$words = $pars->getWords();
+//$words = $pars->getWords();
 $rules = $pars->getRules();
+
 ?>
 
 <a href="<?php echo $_SERVER["REQUEST_URI"];?>">Обновить</a>
@@ -43,6 +45,40 @@ $rules = $pars->getRules();
         </form>
     </li>
 </ul>
+
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        <li class="page-item "><a class="page-link" href="#">Previous</a></li>
+        <li class="page-item"><a class="page-link" href="#">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+    </ul>
+</nav>
+
+
+<?php
+// количество записей, выводимых на странице
+$per_page = 10;
+// получаем номер страницы
+if (isset($_GET['page'])) $page=($_GET['page']-1); else $page=0;
+// вычисляем первый оператор для LIMIT
+$start = abs($page * $per_page);
+// составляем запрос и выводим записи
+// переменную $start используем, как нумератор записей.
+$q = "SELECT * FROM words LIMIT $start, $per_page";
+$res = $db->PDO_FetchAll($q);
+
+$q="SELECT count(*) FROM words";
+$result = $db->PDO_FetchRow($q);
+$total_rows = implode($result);
+
+$num_pages=ceil($total_rows/$per_page);
+
+?>
+
+
 <div class="tab-content" id="pills-tabContent">
     <div class="tab-pane fade show active" id="pills-verbs" role="tabpanel" aria-labelledby="pills-verbs-tab">
         <table class="table table-hover table-bordered">
@@ -61,7 +97,7 @@ $rules = $pars->getRules();
             </thead>
             <tbody>
             <?php
-            foreach ($words as $items) {
+            foreach ($res as $items) {
                 echo '<tr>';
                 foreach ($items as $key => $value) {
                     if ($key != 'id')
@@ -70,11 +106,23 @@ $rules = $pars->getRules();
                 echo '<td>' . $pars->getresult($items["id"]) . '</td>';
                 echo '<td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">изменить</button></td>';
                 echo '</tr>';
+
             }
             ?>
             </tbody>
         </table>
     </div>
+
+    <?php
+    for($i = 1;$i <= $num_pages; $i++) {
+        if ($i - 1 == $page) {
+            echo $i . " ";
+        } else {
+            echo '<a href="' . $_SERVER['PHP_SELF'] . '?page=' . $i . '">' . $i . "</a> ";
+        }
+    }
+    ?>
+
     <div class="tab-pane fade" id="pills-rules" role="tabpanel" aria-labelledby="pills-rules-tab">
         <table class="table table-hover table-bordered">
             <thead class="thead-inverse">
