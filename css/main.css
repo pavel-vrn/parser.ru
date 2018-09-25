@@ -9,3 +9,11 @@
 table {
     text-align: center;
 }
+
+.fixtable-fixed {
+    position: fixed;
+    top: 0;
+    z-index: 101;
+    background-color: #FCF8E4;
+    border-bottom: 1px solid #ddd;
+}

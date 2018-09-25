@@ -9,13 +9,25 @@
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
+
 </head>
 
 <body>
-<!--РАЗОБРАТЬСЯ, ЧТО ПРОИСХОДИТ С БАРОМ ПРИ СУЖЕНИИ СТРАНИЦЫ-->
-<!--РАЗОБРАТЬСЯ, ЧТО ПРОИСХОДИТ С БАРОМ ПРИ СУЖЕНИИ СТРАНИЦЫ-->
-<!--РАЗОБРАТЬСЯ, ЧТО ПРОИСХОДИТ С БАРОМ ПРИ СУЖЕНИИ СТРАНИЦЫ-->
-<!--РАЗОБРАТЬСЯ, ЧТО ПРОИСХОДИТ С БАРОМ ПРИ СУЖЕНИИ СТРАНИЦЫ-->
+
+<?php
+//к времени PhpStorm накинуть 6-8 часов времени
+error_reporting(E_ALL);
+require "inc/Parser.php";
+require "inc/Pdo_Helper.php";
+
+$db = Pdo_Helper::singleton();
+
+$pars = new Parser();
+$result = $pars->getresult(1);
+//$words = $pars->getWords();
+$rules = $pars->getRules();
+?>
+
 <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
     <div class="collapse navbar-collapse" id="navbarColor03">
         <ul class="navbar-nav mr-auto">
@@ -37,64 +49,47 @@
     </div>
 </nav>
 
-<?php
-//к времени PhpStorm накинуть 6-8 часов времени
-error_reporting(E_ALL);
-require "inc/Parser.php";
-require "inc/Pdo_Helper.php";
-
-$db = Pdo_Helper::singleton();
-
-$pars = new Parser();
-$result = $pars->getresult(1);
-//$words = $pars->getWords();
-$rules = $pars->getRules();
-?>
-
 <div>
-    <h1>Слова</h1>
+    <h1>Правила</h1>
     <?php
     // количество записей, выводимых на странице
-    $per_page = 100;
+    $per_page = 5;
     // получаем номер страницы
-    if (isset($_GET['page-words'])) {
-        $page = ($_GET['page-words'] - 1);
+    if (isset($_GET['page-rules'])) {
+        $page = ($_GET['page-rules'] - 1);
     } else
         $page=0;
     // вычисляем первый оператор для LIMIT
     $start = abs($page * $per_page);
     // составляем запрос и выводим записи
     // переменную $start используем, как нумератор записей.
-    $query = "SELECT * FROM words LIMIT $start, $per_page";
+    $query = "SELECT * FROM rules LIMIT $start, $per_page";
     $res = $db->PDO_FetchAll($query);
-    $query = "SELECT count(*) FROM words";
+
+    $query = "SELECT count(*) FROM rules";
     $result = $db->PDO_FetchRow($query);
     $total_rows = implode($result);
-    $num_pages = ceil($total_rows / $per_page);
+    $num_pages=ceil($total_rows / $per_page);
     ?>
     Страницы:
     <?php
     for($i = 1;$i <= $num_pages; $i++) {
-        if ($i - 1 == $page) {
-            echo $i . " ";
-        } else {
-            echo '<a href="' . $_SERVER['PHP_SELF'] . '?page-words=' . $i . '">' . $i . "</a> ";
-        }
+    if ($i - 1 == $page) {
+    echo $i . " ";
+    } else {
+    echo '<a href="' . $_SERVER['PHP_SELF'] . '?page-rules=' . $i . '">' . $i . "</a> ";
+    }
     }
     ?>
-
-    <table class="table table-hover table-bordered fixtable">
+    <table class="table table-hover table-bordered">
         <thead class="thead-inverse">
         <tr>
-            <th>Пример</th>
-            <th>ПредСтОснова</th>
-            <th>СтСуф1</th>
-            <th>СтСуф2</th>
-            <th>КатСуф</th>
-            <th>ПричСуф</th>
-            <th>Флекс</th>
-            <th>Результат</th>
-            <th>Правила</th>
+            <th>Тип</th>
+            <th>Предусловие</th>
+            <th>Постусловие</th>
+            <th>Вход</th>
+            <th>Выход</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -105,7 +100,6 @@ $rules = $pars->getRules();
                 if ($key != 'id')
                     echo '<td>' . $value . '</td>';
             }
-            echo '<td>' . $pars->getresult($items["id"]) . '</td>';
             echo '<td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">изменить</button></td>';
             echo '</tr>';
         }
@@ -118,7 +112,7 @@ $rules = $pars->getRules();
         if ($i - 1 == $page) {
             echo $i . " ";
         } else {
-            echo '<a href="' . $_SERVER['PHP_SELF'] . '?page-words=' . $i . '">' . $i . "</a> ";
+            echo '<a href="' . $_SERVER['PHP_SELF'] . '?page-rules=' . $i . '">' . $i . "</a> ";
         }
     }
     ?>
