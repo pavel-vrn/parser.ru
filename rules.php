@@ -1,7 +1,7 @@
 <html>
 <head>
-    <link rel='stylesheet' href='css/bootstrap.css'>
-    <link rel='stylesheet' href='css/main.css'>
+    <link rel='stylesheet' href='assets/css/bootstrap.css'>
+    <link rel='stylesheet' href='assets/css/main.css'>
 
     <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript" src="js/bootstrap.js"></script>
@@ -51,6 +51,8 @@ $rules = $pars->getRules();
 
 <div>
     <h1>Правила</h1>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" id="add_rule_button">Добавить правило</button>
+    <br>
     <?php
     // количество записей, выводимых на странице
     $per_page = 5;
@@ -100,7 +102,7 @@ $rules = $pars->getRules();
                 if ($key != 'id')
                     echo '<td>' . $value . '</td>';
             }
-            echo '<td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">изменить</button></td>';
+            echo '<td><button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#ruleModal" id="' . $items['id'] . '">изменить</button></td>';
             echo '</tr>';
         }
         ?>
@@ -108,7 +110,7 @@ $rules = $pars->getRules();
     </table>
     Страницы:
     <?php
-    for($i = 1;$i <= $num_pages; $i++) {
+    for($i = 1; $i <= $num_pages; $i++) {
         if ($i - 1 == $page) {
             echo $i . " ";
         } else {
@@ -118,9 +120,9 @@ $rules = $pars->getRules();
     ?>
 </div>
 
-<!-- Модальное окно -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog modal-lg" role="document">
+<!-- Модальное окно добавления/изменения правила  -->
+<div class="modal fade" id="ruleModal" tabindex="-1" role="dialog" aria-labelledby="ruleModalLabel" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Правила для «Требуем»</h5>
@@ -128,17 +130,51 @@ $rules = $pars->getRules();
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-
-                Содержимое модального окна
-
+            <div class="modal-body edit-content">
+                <div class="form-group">
+                    <label class="font-weight-bold" for="sel1">Тип правила:</label>
+                    <select class="form-control" id="sel1">
+                        <option>ПредСтОснова</option>
+                        <option>СтСуф1</option>
+                        <option>СтСуф2</option>
+                        <option>КатСуф</option>
+                        <option>ПричСуф</option>
+                        <option>ПричСуф</option>
+                        <option>Флекс</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="font-weight-bold" for="precondition">Предусловие:</label>
+                    <input type="text" class="form-control" id="precondition">
+                </div>
+                <div class="form-group">
+                    <label class="font-weight-bold" for="postcondition">Постусловие:</label>
+                    <input type="password" class="form-control" id="postcondition">
+                </div>
+                <div class="form-group">
+                    <label class="font-weight-bold" for="inpit">Вход:</label>
+                    <input type="password" class="form-control" id="inpit">
+                </div>
+                <div class="form-group">
+                    <label class="font-weight-bold" for="output">Выход:</label>
+                    <input type="password" class="form-control" id="output">
+                </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-info">Любая кнопка</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                <button type="button" class="btn btn-success">Сохранить</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    $('#ruleModal').on('show.bs.modal', function(e) {
+        var $modal = $(this),
+            esseyId = e.relatedTarget.id;
+        $modal.find("#precondition").val(esseyId);
+    })
+</script>
+
 </body>
 </html>

@@ -73,7 +73,7 @@ SQL;
         //применяем по порядку все правила для слова
         foreach ($rules as $value) {
             switch ($value['type']) {
-                case 'pre_base':
+                case 'ПредСтОснова':
                     if ($value['postcondition'] != null) {
                         if ($value['postcondition'] == $transWord['first_st_suff']) {
                             $transWord['pre_base'] = $value['output'];
@@ -81,7 +81,7 @@ SQL;
                     } else
                         $transWord['pre_base'] = $value['output'];
                     break;
-                case 'first_st_suff':
+                case 'СтСуф1':
                     if ($value['precondition'] != null && $value['postcondition'] != null) {
                         if ($value['precondition'] == $transWord['pre_base'] && $value['postcondition'] == $transWord['second_st_suff']) {
                             $transWord['first_st_suff'] = $value['output'];
@@ -97,7 +97,7 @@ SQL;
                     } else
                             $transWord['first_st_suff'] = $value['output'];
                     break;
-                case 'second_st_suff':
+                case 'СтСуф2':
                     if ($value['precondition'] != null && $value['postcondition'] != null) {
                         if ($value['precondition'] == $transWord['first_st_suff'] && $value['postcondition'] == $transWord['cat_suff']) {
                             $transWord['second_st_suff'] = $value['output'];
@@ -112,7 +112,7 @@ SQL;
                             } else
                                 $transWord['second_st_suff'] = $value['output'];
                     break;
-                case 'cat_suff':
+                case 'КатСуф':
                     if ($value['precondition'] != null && $value['postcondition'] != null) {
                         if ($value['precondition'] == $transWord['second_st_suff'] && $value['postcondition'] == $transWord['part_suff']) {
                             $transWord['cat_suff'] = $value['output'];
@@ -121,13 +121,14 @@ SQL;
                         if ($value['precondition'] == $transWord['second_suff']) {
                             $transWord['[cat_suff'] = $value['output'];
                         }
-                        } elseif ($value['precondition'] == null && $value['postcondition'] != null)
+                        } elseif ($value['precondition'] == null && $value['postcondition'] != null) {
                             if ($value['postcondition'] == $transWord['part_suff']) {
                                 $transWord['cat_suff'] = $value['output'];
+                            }
                             } else
-                                $transWord['cat'] = $value['output'];
+                                $transWord['cat_suff'] = $value['output'];
                     break;
-                case 'part_suff':
+                case 'ПричСуф':
                     if ($value['precondition'] != null && $value['postcondition'] != null) {
                         if ($value['precondition'] == $transWord['cat_suff'] && $value['postcondition'] == $transWord['flex'])
                             $transWord['part_suff'] = $value['output'];
@@ -140,14 +141,13 @@ SQL;
                             } else
                                 $transWord['part_suff'] = $value['output'];
                     break;
-                case 'flex':
+                case 'Флекс':
                     if ($value['precondition'] != null) {
                         if ($value['precondition'] == $transWord['part_suff']) {
                             $transWord['flex'] = $value['output'];
                         }
                     } else
                         $transWord['flex'] = $value['output'];
-
             }
         }
         return implode($transWord);

@@ -1,7 +1,7 @@
 <html>
 <head>
-    <link rel='stylesheet' href='css/bootstrap.css'>
-    <link rel='stylesheet' href='css/main.css'>
+    <link rel='stylesheet' href='assets/css/bootstrap.css'>
+    <link rel='stylesheet' href='assets/css/main.css'>
 
     <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript" src="js/bootstrap.js"></script>
@@ -106,7 +106,7 @@ $rules = $pars->getRules();
                     echo '<td>' . $value . '</td>';
             }
             echo '<td>' . $pars->getresult($items["id"]) . '</td>';
-            echo '<td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">изменить</button></td>';
+            echo '<td><button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal">изменить</button></td>';
             echo '</tr>';
         }
         ?>
