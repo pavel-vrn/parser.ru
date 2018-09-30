@@ -40,6 +40,7 @@
 <?php
 //к времени PhpStorm накинуть 6-8 часов времени
 error_reporting(E_ALL);
+//error_reporting(E_ALL & ~E_NOTICE);
 require "inc/Parser.php";
 require "inc/Pdo_Helper.php";
 

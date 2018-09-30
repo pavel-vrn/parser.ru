@@ -16,7 +16,8 @@
 
 <?php
 //к времени PhpStorm накинуть 6-8 часов времени
-error_reporting(E_ALL);
+//error_reporting(E_ALL);
+error_reporting(E_ALL & ~E_NOTICE);
 require "inc/Parser.php";
 require "inc/Pdo_Helper.php";
 
@@ -159,6 +160,13 @@ $rules = $pars->getRules();
                     <label class="font-weight-bold" for="output">Выход:</label>
                     <input type="password" class="form-control" id="output">
                 </div>
+                <form action="rules.php" method="post" id="rule_form">
+                    <input type="hidden" id="rule_id_input" name="rule_id_input">
+                </form>
+                <?php
+                $post = $_POST['rule_id_input'];
+                echo $post;
+                ?>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-success">Сохранить</button>
@@ -172,7 +180,8 @@ $rules = $pars->getRules();
     $('#ruleModal').on('show.bs.modal', function(e) {
         var $modal = $(this),
             esseyId = e.relatedTarget.id;
-        $modal.find("#precondition").val(esseyId);
+        $modal.find("#rule_id_input").val(esseyId);
+        $modal.find("#rule_form").submit();
     })
 </script>
 
