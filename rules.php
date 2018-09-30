@@ -1,6 +1,7 @@
 <html>
 <head>
     <link rel='stylesheet' href='assets/css/bootstrap.css'>
+    <link rel='stylesheet' href='assets/open-iconic-master/font/css/open-iconic-bootstrap.css'>
     <link rel='stylesheet' href='assets/css/main.css'>
 
     <script type="text/javascript" src="js/jquery.js"></script>
@@ -9,7 +10,7 @@
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
-
+    <script type="text/javascript" src="js/ajax.js"></script>
 </head>
 
 <body>
@@ -92,7 +93,7 @@ $rules = $pars->getRules();
             <th>Постусловие</th>
             <th>Вход</th>
             <th>Выход</th>
-            <th></th>
+            <th>Изменить / Удалить</th>
         </tr>
         </thead>
         <tbody>
@@ -103,7 +104,7 @@ $rules = $pars->getRules();
                 if ($key != 'id')
                     echo '<td>' . $value . '</td>';
             }
-            echo '<td><button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#ruleModal" id="' . $items['id'] . '">изменить</button></td>';
+            echo '<td><button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#ruleModal" id="' . $items['id'] . '"><span class="oi oi-pencil" title="pencil" aria-hidden="true"></span></button>&nbsp;&nbsp; <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#ruleModal" id="' . $items['id'] . '"><span class="oi oi-x" title="x" aria-hidden="true"></span></button></td>';
             echo '</tr>';
         }
         ?>
@@ -160,13 +161,11 @@ $rules = $pars->getRules();
                     <label class="font-weight-bold" for="output">Выход:</label>
                     <input type="password" class="form-control" id="output">
                 </div>
-                <form action="rules.php" method="post" id="rule_form">
-                    <input type="hidden" id="rule_id_input" name="rule_id_input">
+
+                <form method="post" id="ajax_form" action="" >
+                    <input type="hidden" id="rule_id_input" name="name" placeholder="NAME" value="0"><br>
                 </form>
-                <?php
-                $post = $_POST['rule_id_input'];
-                echo $post;
-                ?>
+                <div id="result_form"></div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-success">Сохранить</button>
@@ -179,9 +178,9 @@ $rules = $pars->getRules();
 <script>
     $('#ruleModal').on('show.bs.modal', function(e) {
         var $modal = $(this),
-            esseyId = e.relatedTarget.id;
-        $modal.find("#rule_id_input").val(esseyId);
-        $modal.find("#rule_form").submit();
+            ruleId = e.relatedTarget.id;
+        $modal.find("#rule_id_input").val(ruleId);
+        sendAjaxForm('result_form', 'ajax_form', 'ajax/action_ajax_form.php');
     })
 </script>
 
