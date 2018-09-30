@@ -43,9 +43,9 @@ SQL;
         return $result;
     }
 
-    public function getRules() {
+    public function getRulesForWord($word_id) {
         $query = <<<SQL
-SELECT type, precondition, postcondition, input, output FROM rules
+SELECT r.type, r.precondition, r.postcondition, r.input, r.output, l.id, l.priority FROM rules r JOIN links l on r.id = l.rule_id WHERE l.word_id = $word_id ORDER BY l.priority
 SQL;
         $result = $this->_db->PDO_FetchAll($query);
         return $result;

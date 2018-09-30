@@ -1,6 +1,7 @@
 <html>
 <head>
     <link rel='stylesheet' href='assets/css/bootstrap.css'>
+    <link rel='stylesheet' href='assets/open-iconic-master/font/css/open-iconic-bootstrap.css'>
     <link rel='stylesheet' href='assets/css/main.css'>
 
     <script type="text/javascript" src="js/jquery.js"></script>
@@ -9,6 +10,7 @@
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
+    <script type="text/javascript" src="js/ajax.js"></script>
 </head>
 
 <body>
@@ -43,13 +45,14 @@ error_reporting(E_ALL);
 //error_reporting(E_ALL & ~E_NOTICE);
 require "inc/Parser.php";
 require "inc/Pdo_Helper.php";
+include "ajax/action_ajax_form.php";
 
 $db = Pdo_Helper::singleton();
 
 $pars = new Parser();
-$result = $pars->getresult(1);
+//$result = $pars->getresult(1);
 //$words = $pars->getWords();
-$rules = $pars->getRules();
+//$rules = $pars->getRules();
 ?>
 
 <div>
@@ -107,7 +110,7 @@ $rules = $pars->getRules();
                     echo '<td>' . $value . '</td>';
             }
             echo '<td>' . $pars->getresult($items["id"]) . '</td>';
-            echo '<td><button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal">изменить</button></td>';
+            echo '<td><button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#linksModal" id="' . $items['id'] . '"><span class="oi oi-pencil" title="pencil" aria-hidden="true"></span></button></td>';
             echo '</tr>';
         }
         ?>
@@ -125,8 +128,8 @@ $rules = $pars->getRules();
     ?>
 </div>
 
-<!-- Модальное окно -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+<!-- Модальное окно правил для слова-->
+<div class="modal fade" id="linksModal" tabindex="-1" role="dialog" aria-labelledby="linksModalLabel" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -136,16 +139,58 @@ $rules = $pars->getRules();
                 </button>
             </div>
             <div class="modal-body">
+                <?php
+                $rulesForWord = $pars->getRulesForWord(1);
+                ?>
 
-                Содержимое модального окна
+                <table class="table table-hover table-bordered fixtable">
+                    <thead class="thead-inverse">
+                    <tr>
+                        <th>Тип</th>
+                        <th>Предусловие</th>
+                        <th>Постусловие</th>
+                        <th>Вход</th>
+                        <th>Выход</th>
+                        <th>Приоритет</th>
+                        <th>Изменить / Удалить</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php
+                    foreach ($rulesForWord as $items) {
+                        echo '<tr>';
+                        foreach ($items as $key => $value) {
+                            if ($key != 'id')
+                                echo '<td>' . $value . '</td>';
+                        }
+                        echo '<td><button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#linksModal" id="' . $items['id'] . '"><span class="oi oi-pencil" title="pencil" aria-hidden="true"></span></button></td>';
+                        echo '</tr>';
+                    }
+                    ?>
+                    </tbody>
+                </table>
 
+                <form method="post" id="ajax_form" action="" >
+                    <input type="hidden" id="word_id_input" name="word_id" value="0"><br>
+                </form>
+                <div id="result_form"></div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-info">Любая кнопка</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                <button type="button" class="btn btn-success">Сохранить</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    $('#linksModal').on('show.bs.modal', function(e) {
+        var $modal = $(this),
+            wordId = e.relatedTarget.id;
+        $modal.find("#word_id_input").val(wordId);
+        sendAjaxWords('result_form', 'ajax_form', 'ajax/action_ajax_form.php');
+    })
+</script>
+
 </body>
 </html>

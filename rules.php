@@ -27,7 +27,7 @@ $db = Pdo_Helper::singleton();
 $pars = new Parser();
 $result = $pars->getresult(1);
 //$words = $pars->getWords();
-$rules = $pars->getRules();
+//$rules = $pars->getRules();
 ?>
 
 <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
@@ -163,7 +163,7 @@ $rules = $pars->getRules();
                 </div>
 
                 <form method="post" id="ajax_form" action="" >
-                    <input type="hidden" id="rule_id_input" name="name" placeholder="NAME" value="0"><br>
+                    <input type="hidden" id="rule_id_input" name="rule_id" value="0"><br>
                 </form>
                 <div id="result_form"></div>
             </div>
@@ -180,7 +180,7 @@ $rules = $pars->getRules();
         var $modal = $(this),
             ruleId = e.relatedTarget.id;
         $modal.find("#rule_id_input").val(ruleId);
-        sendAjaxForm('result_form', 'ajax_form', 'ajax/action_ajax_form.php');
+        sendAjaxRules('result_form', 'ajax_form', 'ajax/action_ajax_form.php');
     })
 </script>
 
