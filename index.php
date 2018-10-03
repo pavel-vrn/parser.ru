@@ -68,9 +68,11 @@ $pars = new Parser();
                 if ($key != 'id')
                     echo '<td>' . $value . '</td>';
             }
-            echo '<td>' . $pars->getresult($items["id"]) . '</td>';
-            echo '<td><button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#linksModal" id="' . $items['id'] . '"><span class="oi oi-pencil" title="pencil" aria-hidden="true"></span></button></td>';
-            echo '</tr>';
+            echo '<td>' . $pars->getresult($items["id"]) . '</td>'
+            . '<form action="links.php" id="links" method="post">'
+            . '<td><button type="submit" class="btn btn-outline-primary" name="button_id" value="' . $items['id'] . '"><span class="oi oi-pencil" title="pencil" aria-hidden="true"></span></button></td>'
+            . '</form>'
+            . '</tr>';
         }
         ?>
         </tbody>
