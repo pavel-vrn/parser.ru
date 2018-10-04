@@ -69,8 +69,9 @@ $pars = new Parser();
                     echo '<td>' . $value . '</td>';
             }
             echo '<td>' . $pars->getresult($items["id"]) . '</td>'
-            . '<form action="links.php" id="links" method="post">'
-            . '<td><button type="submit" class="btn btn-outline-primary" name="button_id" value="' . $items['id'] . '"><span class="oi oi-pencil" title="pencil" aria-hidden="true"></span></button></td>'
+            . '<form action="links.php" id="links" method="get">'
+            . '<td><button type="submit" class="btn btn-outline-primary" name="button_id" value="' . $items['id'] . '"><span class="oi oi-pencil" aria-hidden="true"></span></button></td>'
+            . '<input type="hidden" name="source_word" value="' . $items['example'] . '"  >'
             . '</form>'
             . '</tr>';
         }
@@ -153,4 +154,4 @@ $pars = new Parser();
     })
 </script>
 
-<?php require ("inc/footer.php");
+<?php require_once ("inc/footer.php");

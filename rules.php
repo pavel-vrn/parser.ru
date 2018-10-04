@@ -12,8 +12,6 @@ $result = $pars->getresult(1);
 ?>
 <div>
     <h1>Правила</h1>
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" id="add_rule_button">Добавить правило</button>
-    <br>
     <?php
     // количество записей, выводимых на странице
     $per_page = 5;
@@ -143,4 +141,4 @@ $result = $pars->getresult(1);
     })
 </script>
 
-<?php require ("inc/footer.php");
+<?php require_once ("inc/footer.php");
