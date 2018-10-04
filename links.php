@@ -19,12 +19,9 @@ if (isset($_POST['button_id'])) {
     exit();
 }
 //print_r($_POST);
-var_dump($_SERVER);
 ?>
     <h4>Правила для &laquo;стлать&raquo;</h4>
-<form action="<?= $_SERVER['HTTP_REFERER'] ?>">
-    <button type="submit" class="btn btn-outline-primary" data-toggle="modal" data-target="#linksModal" value="test"><span class="oi oi-arrow-thick-left" title="arrow-thick-left" aria-hidden="true"></span>&nbsp; К списку слов</button>
-</form>
+    <button type="submit" onclick="location.href = '<?= $_SERVER['HTTP_REFERER'] ?>'" class="btn btn-outline-primary" data-toggle="modal" data-target="#linksModal" value="test"><span class="oi oi-arrow-thick-left" title="arrow-thick-left" aria-hidden="true"></span>&nbsp; К списку слов</button>
     <br>
     <br>
     <table class="table table-hover table-bordered fixtable">
